@@ -1,4 +1,4 @@
-# :ramen: miso-canvas2d
+# :ramen: 🖌️ miso-canvas2d
 
 ## Build and run
 
