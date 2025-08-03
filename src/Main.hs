@@ -27,9 +27,9 @@ baseUrl :: MisoString
 baseUrl = "https://7b40c187-5088-4a99-9118-37d20a2f875e.mdnplay.dev/en-US/docs/Web/API/Canvas_API/Tutorial/Basic_animations/"
 -----------------------------------------------------------------------------
 main :: IO ()
-main = run (startComponent app)
+main = run (startApp app)
   where
-    app :: Component (Double, Double) Action
+    app :: App (Double, Double) Action
     app = (component (0.0, 0.0) updateModel view_) { initialAction = Just GetTime }
 
     view_  m =
@@ -87,7 +87,7 @@ newTime = do
 -----------------------------------------------------------------------------
 updateModel
   :: Action
-  -> Effect Model Action
+  -> Transition Model Action
 updateModel GetTime =
   io (SetTime <$> newTime)
 updateModel (SetTime m) =
