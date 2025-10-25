@@ -41,7 +41,7 @@ main = run (startApp app)
         ]
         initCanvas
         (canvasDraw m n)
-      | n <- [ 1 :: Int .. 8 ]
+      | n <- [ 1 :: Int .. 2 ]
       ]
 -----------------------------------------------------------------------------
 initCanvas :: DOMRef -> Canvas (Image, Image, Image)
