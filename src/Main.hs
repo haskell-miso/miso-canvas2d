@@ -1,5 +1,6 @@
 -----------------------------------------------------------------------------
 {-# LANGUAGE CPP               #-}
+{-# LANGUAGE LambdaCase        #-}
 {-# LANGUAGE OverloadedStrings #-}
 -----------------------------------------------------------------------------
 module Main where
@@ -8,20 +9,25 @@ import           Control.Monad               (replicateM_)
 import           Language.Javascript.JSaddle (JSM, liftJSM)
 -----------------------------------------------------------------------------
 import           Miso
+import           Miso.Html hiding (style_)
+import           Miso.Html.Property
+import           Miso.Lens
 import           Miso.Canvas
 import qualified Miso.Canvas as Canvas
 import           Miso.String
-import           Miso.Style
+import           Miso.CSS (rgba, fontSize, fontFamily, px, style_, margin)
 -----------------------------------------------------------------------------
 #ifdef WASM
 foreign export javascript "hs_start" main :: IO ()
 #endif
 -----------------------------------------------------------------------------
-type Model = (Double, Double)
+type Model = ((Double, Double), Int)
 -----------------------------------------------------------------------------
 data Action
   = GetTime
-  | SetTime Model
+  | SetTime (Double, Double)
+  | Add
+  | Remove
 -----------------------------------------------------------------------------
 baseUrl :: MisoString
 baseUrl = "https://7b40c187-5088-4a99-9118-37d20a2f875e.mdnplay.dev/en-US/docs/Web/API/Canvas_API/Tutorial/Basic_animations/"
@@ -29,19 +35,29 @@ baseUrl = "https://7b40c187-5088-4a99-9118-37d20a2f875e.mdnplay.dev/en-US/docs/W
 main :: IO ()
 main = run (startApp app)
   where
-    app :: App (Double, Double) Action
-    app = (component (0.0, 0.0) updateModel view_) { initialAction = Just GetTime }
+    app :: App Model Action
+    app = (component ((0.0, 0.0),1) updateModel view_) { initialAction = Just GetTime }
 
-    view_  m =
+    view_  (m,k)  =
       div_
       [ id_ "Canvas grid" ]
+      $
+      [ h1_ [ style_ [ fontFamily "monospace" ] ] [ "🍜 miso-canvas2d" ]
+      , div_
+        [ ]
+        [ button_
+          [ style_ [ fontSize (px 26), margin "5px" ], onClick Add ]
+          [ "Add" ]
+        , button_ [ style_ [ fontSize (px 26), margin "5px" ], onClick Remove ] [ "Remove" ]
+        ]
+      ] ++
       [ Canvas.canvas
         [ width_ "300"
         , height_ "300"
         ]
         initCanvas
         (canvasDraw m n)
-      | n <- [ 1 :: Int .. 2 ]
+      | n <- [ 1 :: Int .. k ]
       ]
 -----------------------------------------------------------------------------
 initCanvas :: DOMRef -> Canvas (Image, Image, Image)
@@ -88,8 +104,12 @@ newTime = do
 updateModel
   :: Action
   -> Transition Model Action
-updateModel GetTime =
-  io (SetTime <$> newTime)
-updateModel (SetTime m) =
-  m <# pure GetTime
+updateModel = \case
+  GetTime ->
+    io (SetTime <$> newTime)
+  SetTime m -> do
+    _1 .= m
+    issue GetTime
+  Add -> _2 += 1
+  Remove -> _2 %= \x -> if x == 0 then 0 else x - 1
 -----------------------------------------------------------------------------
