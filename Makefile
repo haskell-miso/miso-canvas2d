@@ -2,6 +2,8 @@
 
 all: clean update build optim
 
+js: update-js build-js
+
 update:
 	wasm32-wasi-cabal update
 
@@ -23,3 +25,12 @@ serve:
 clean:
 	rm -rf dist-newstyle public
 
+update-js:
+	cabal update --with-ghc=javascript-unknown-ghcjs-ghc --with-hc-pkg=javascript-unknown-ghcjs-ghc-pkg
+
+build-js:
+	cabal build --with-ghc=javascript-unknown-ghcjs-ghc --with-hc-pkg=javascript-unknown-ghcjs-ghc-pkg
+	cp -v ./dist-newstyle/build/javascript-ghcjs/ghc-9.12.2/*/x/app/build/app/app.jsexe/all.js .
+	rm -rf public
+	cp -rv static public
+	bunx swc ./all.js -o public/index.js

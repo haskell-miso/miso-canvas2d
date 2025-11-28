@@ -9,13 +9,13 @@ import           Control.Monad               (replicateM_)
 import           Language.Javascript.JSaddle (JSM, liftJSM)
 -----------------------------------------------------------------------------
 import           Miso
-import           Miso.Html hiding (style_)
-import           Miso.Html.Property
 import           Miso.Lens
+import           Miso.Html
+import           Miso.Html.Property
 import           Miso.Canvas
 import qualified Miso.Canvas as Canvas
 import           Miso.String
-import           Miso.CSS (rgba, fontSize, fontFamily, px, style_, margin)
+import qualified Miso.CSS as CSS
 -----------------------------------------------------------------------------
 #ifdef WASM
 foreign export javascript "hs_start" main :: IO ()
@@ -42,13 +42,30 @@ main = run (startApp app)
       div_
       [ id_ "Canvas grid" ]
       $
-      [ h1_ [ style_ [ fontFamily "monospace" ] ] [ "🍜 miso-canvas2d" ]
+      [ h1_
+        [ CSS.style_
+          [ CSS.fontFamily "monospace"
+          ]
+        ]
+        [ "🍜 miso-canvas2d"
+        ]
       , div_
         [ ]
         [ button_
-          [ style_ [ fontSize (px 26), margin "5px" ], onClick Add ]
+          [ CSS.style_
+            [ CSS.fontSize (CSS.px 26)
+            , CSS.margin "5px"
+            ]
+          , onClick Add
+          ]
           [ "Add" ]
-        , button_ [ style_ [ fontSize (px 26), margin "5px" ], onClick Remove ] [ "Remove" ]
+        , button_
+          [ CSS.style_
+            [ CSS.fontSize (CSS.px 26), CSS.margin "5px"
+            ]
+          , onClick Remove
+          ]
+          [ "Remove" ]
         ]
       ] ++
       [ Canvas.canvas
@@ -78,8 +95,8 @@ canvasDraw (millis', secs') n (sun, moon, earth) = do
      millis = millis' + fromIntegral n
    globalCompositeOperation DestinationOver
    clearRect (0,0,300,300)
-   fillStyle $ Canvas.color (rgba 0 0 0 0.6)
-   strokeStyle $ Canvas.color (rgba 0 153 255 0.4)
+   fillStyle $ Canvas.color (CSS.rgba 0 0 0 0.6)
+   strokeStyle $ Canvas.color (CSS.rgba 0 153 255 0.4)
    save ()
    translate (150, 150)
    rotate ((((2 * pi) / 60) * secs) + (((2 * pi) / 60000) * millis))
