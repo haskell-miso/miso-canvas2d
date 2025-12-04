@@ -17,13 +17,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: cachix/cachix-action@v16
-        with:
-          name: haskell-miso-cachix
-
       - uses: cachix/install-nix-action@v31
         with:
           github_access_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: cachix/cachix-action@v16
+        with:
+          name: haskell-miso-cachix
 
       - name: Build using Nix
         run: nix develop .#ghcjs --command bash -c "make clean && make js"
