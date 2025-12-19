@@ -47,7 +47,8 @@ main = run (startApp app)
           [ CSS.fontFamily "monospace"
           ]
         ]
-        [ "🍜 miso-canvas2d"
+        [ "🍜 "
+        , a_ [ href_ "https://github.com/haskell-miso/miso-canvas2d" ] [ "miso-canvas2d" ]
         ]
       , div_
         [ ]
