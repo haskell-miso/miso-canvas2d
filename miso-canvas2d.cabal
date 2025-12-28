@@ -28,7 +28,7 @@ executable app
     options
   hs-source-dirs:       src
   main-is:              Main.hs
-  build-depends:        base, jsaddle, miso
+  build-depends:        base, jsaddle, miso, containers
   default-language:     GHC2024
   default-extensions:   CPP TemplateHaskell
  
