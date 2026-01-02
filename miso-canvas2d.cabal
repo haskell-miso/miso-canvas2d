@@ -24,11 +24,10 @@ common options
       -DVANILLA
 
 executable app
-  import:
-    options
-  hs-source-dirs:       src
-  main-is:              Main.hs
-  build-depends:        base, miso
-  default-language:     GHC2024
-  default-extensions:   CPP TemplateHaskell
+  import:             options
+  hs-source-dirs:     src
+  main-is:            Main.hs
+  build-depends:      base, containers, miso
+  default-language:   GHC2024
+  default-extensions: CPP TemplateHaskell
  
