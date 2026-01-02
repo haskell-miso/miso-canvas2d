@@ -6,7 +6,6 @@
 module Main where
 -----------------------------------------------------------------------------
 import           Control.Monad               (replicateM_)
-import           Language.Javascript.JSaddle (JSM, liftJSM)
 -----------------------------------------------------------------------------
 import           Miso
 import           Miso.Lens
@@ -79,7 +78,7 @@ main = run (startApp app)
       ]
 -----------------------------------------------------------------------------
 initCanvas :: DOMRef -> Canvas (Image, Image, Image)
-initCanvas _ = liftJSM $ do
+initCanvas _ = liftIO $ do
   sun <- newImage (baseUrl <> "canvas_sun.png")
   moon <- newImage (baseUrl <> "canvas_moon.png")
   earth <- newImage (baseUrl <> "canvas_earth.png")
@@ -114,8 +113,8 @@ canvasDraw (millis', secs') n (sun, moon, earth) = do
    stroke ()
    drawImage' (sun, 0, 0, 300, 300)
 -----------------------------------------------------------------------------
-newTime :: JSM (Double, Double)
-newTime = do
+newTime :: IO (Double, Double)
+newTime = liftIO $ do
   date <- newDate
   (,) <$> getMilliseconds date <*> getSeconds date
 -----------------------------------------------------------------------------
