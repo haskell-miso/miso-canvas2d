@@ -26,8 +26,7 @@ data Model = Model
   { _time   :: (Double, Double)
   , _count  :: Int
   , _loaded :: Int
-  }
-  deriving (Eq, Show)
+  } deriving (Eq, Show)
 -----------------------------------------------------------------------------
 data Action
   = GetTime
@@ -40,12 +39,14 @@ baseUrl :: MisoString
 baseUrl = "https://7b40c187-5088-4a99-9118-37d20a2f875e.mdnplay.dev/en-US/docs/Web/API/Canvas_API/Tutorial/Basic_animations/"
 -----------------------------------------------------------------------------
 main :: IO ()
-main = run (startApp app) 
+main = run (startApp events app)
   where
+    events :: Events
+    events = M.insert "load" CAPTURE defaultEvents
+
     app :: App Model Action
     app = (component (Model (0.0, 0.0) 1 0) updateModel viewModel)
       { initialAction = Just GetTime
-      , events = M.insert "load" CAPTURE defaultEvents
       }
 
     viewModel Model { _time = m, _count = k, _loaded = x } =
