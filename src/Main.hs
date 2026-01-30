@@ -39,7 +39,7 @@ baseUrl :: MisoString
 baseUrl = "https://7b40c187-5088-4a99-9118-37d20a2f875e.mdnplay.dev/en-US/docs/Web/API/Canvas_API/Tutorial/Basic_animations/"
 -----------------------------------------------------------------------------
 main :: IO ()
-main = run (startApp events app)
+main = startApp events app
   where
     events :: Events
     events = M.insert "load" CAPTURE defaultEvents
