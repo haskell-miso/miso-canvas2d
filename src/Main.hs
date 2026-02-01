@@ -46,7 +46,7 @@ main = startApp events app
 
     app :: App Model Action
     app = (component (Model (0.0, 0.0) 1 0) updateModel viewModel)
-      { initialAction = Just GetTime
+      { mount = Just GetTime
       }
 
     viewModel Model { _time = m, _count = k, _loaded = x } =
