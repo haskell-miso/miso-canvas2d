@@ -151,7 +151,7 @@ newTime = liftIO $ do
 -----------------------------------------------------------------------------
 updateModel
   :: Action
-  -> Transition Model Action
+  -> Effect parent Model Action
 updateModel = \case
   GetTime ->
     io (SetTime <$> newTime)
