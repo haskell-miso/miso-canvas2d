@@ -89,6 +89,7 @@ main = startApp events app
           , onClick Remove
           ]
           [ "Remove" ]
+        , br_ []
         ] ++
       if x == 3 -- dmj: 3 img loaded
       then
