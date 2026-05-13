@@ -45,7 +45,7 @@ main = startApp events app
     events = M.insert "load" CAPTURE defaultEvents
 
     app :: App Model Action
-    app = (component (Model (0.0, 0.0) 1 0) updateModel viewModel)
+    app = (vcomp (Model (0.0, 0.0) 1 0) updateModel viewModel)
       { mount = Just GetTime
       }
 
@@ -73,7 +73,7 @@ main = startApp events app
         [ "🍜 "
         , a_ [ href_ "https://github.com/haskell-miso/miso-canvas2d" ] [ "miso-canvas2d" ]
         ]
-      , vfrag
+      , vfrag $
         [ button_
           [ CSS.style_
             [ CSS.fontSize (CSS.px 26)
@@ -89,8 +89,7 @@ main = startApp events app
           , onClick Remove
           ]
           [ "Remove" ]
-        ]
-      ] ++
+        ] ++
       if x == 3 -- dmj: 3 img loaded
       then
         [ Canvas.canvas
@@ -103,6 +102,7 @@ main = startApp events app
         ]
       else
         [ "Loading..." ]
+      ]
 -----------------------------------------------------------------------------
 initCanvas :: DOMRef -> Canvas (Image, Image, Image)
 initCanvas _ = liftIO $ do
