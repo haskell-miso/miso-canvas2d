@@ -27,7 +27,7 @@ executable app
   import:             options
   hs-source-dirs:     src
   main-is:            Main.hs
-  build-depends:      base, containers, miso
+  build-depends:      base, containers, miso >= 1.11 && < 2.0
   default-language:   GHC2024
   default-extensions: CPP TemplateHaskell
  

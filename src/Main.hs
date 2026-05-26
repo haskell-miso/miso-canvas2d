@@ -49,7 +49,7 @@ main = startApp events app
       { mount = Just GetTime
       }
 
-    viewModel Model { _time = m, _count = k, _loaded = x } = vfrag
+    viewModel _ Model { _time = m, _count = k, _loaded = x } = vfrag
       [ img_ [ CSS.style_ [ CSS.display "none" ]
              , id_ "sun"
              , src_ (baseUrl <> "canvas_sun.png")
@@ -148,7 +148,7 @@ newTime = liftIO $ do
 -----------------------------------------------------------------------------
 updateModel
   :: Action
-  -> Effect parent Model Action
+  -> Effect parent props Model Action
 updateModel = \case
   GetTime ->
     io (SetTime <$> newTime)
