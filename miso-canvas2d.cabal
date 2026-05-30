@@ -1,6 +1,6 @@
-cabal-version:          3.0
-name:                   miso-canvas2d
-version:                0.1
+cabal-version: 3.0
+name:          miso-canvas2d
+version:       0.1
 
 common options
   if impl(ghcjs) || arch(javascript)

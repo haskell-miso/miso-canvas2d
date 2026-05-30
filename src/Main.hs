@@ -29,8 +29,7 @@ data Model = Model
   } deriving (Eq, Show)
 -----------------------------------------------------------------------------
 data Action
-  = GetTime
-  | SetTime (Double, Double)
+  = Tick Double
   | Add
   | Remove
   | Loaded
@@ -46,10 +45,10 @@ main = startApp events app
 
     app :: App Model Action
     app = (component (Model (0.0, 0.0) 1 0) updateModel viewModel)
-      { mount = Just GetTime
+      { subs = [ rAFSub Tick ]
       }
 
-    viewModel Model { _time = m, _count = k, _loaded = x } =
+    viewModel () Model { _time = m, _count = k, _loaded = x } =
       div_
       [ id_ "Canvas grid" ]
       $
@@ -144,20 +143,11 @@ canvasDraw (millis', secs') n (sun, moon, earth) = do
    stroke ()
    drawImage' (sun, 0, 0, 300, 300)
 -----------------------------------------------------------------------------
-newTime :: IO (Double, Double)
-newTime = liftIO $ do
-  date <- newDate
-  (,) <$> getMilliseconds date <*> getSeconds date
------------------------------------------------------------------------------
 updateModel
   :: Action
-  -> Effect parent Model Action
+  -> Effect parent props Model Action
 updateModel = \case
-  GetTime ->
-    io (SetTime <$> newTime)
-  SetTime m -> do
-    time .= m
-    issue GetTime
+  Tick millis -> time .= (millis, millis / 1000)
   Add -> count += 1
   Remove -> count %= \x -> if x == 0 then 0 else x - 1
   Loaded -> loaded += 1
