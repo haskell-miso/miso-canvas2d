@@ -75,8 +75,7 @@ main = startApp events app
         [ "🍜 "
         , a_ [ href_ "https://github.com/haskell-miso/miso-canvas2d" ] [ "miso-canvas2d" ]
         ]
-      , div_
-        [ ]
+      , vfrag $
         [ button_
           [ CSS.style_
             [ CSS.fontSize (CSS.px 26)
@@ -92,8 +91,8 @@ main = startApp events app
           , onClick Remove
           ]
           [ "Remove" ]
-        ]
-      ] ++
+        , br_ []
+        ] ++
       if x == 3 -- dmj: 3 img loaded
       then
         [ Canvas.canvas
@@ -106,6 +105,7 @@ main = startApp events app
         ]
       else
         [ "Loading..." ]
+      ]
 -----------------------------------------------------------------------------
 initCanvas :: DOMRef -> Canvas (Image, Image, Image)
 initCanvas _ = liftIO $ do
